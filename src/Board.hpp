@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <utility>
+#include "Cards.hpp"
 #include "Player.hpp"
 #include "Property.hpp"
 
@@ -12,6 +13,8 @@ class Board
   public:
     Board();
     virtual ~Board();
+
+    Cards Chance, Chest;
 
     void AddPlayer(std::string name);
     void Turn(std::string name);

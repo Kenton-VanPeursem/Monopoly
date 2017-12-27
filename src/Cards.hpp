@@ -4,6 +4,8 @@
 #include <queue>
 #include "Defines.hpp"
 
+extern const long stack_size;
+
 struct card
 {
     e_card type;
@@ -19,6 +21,10 @@ class Cards
     Cards(e_type type);
     virtual ~Cards() {;};
 
+    void Shuffle();
+    void GetCard(card *it);
+
     private:
-    std::queue<card> stack;
+    card stack[stack_size];
+    std::queue<card*> pile;
 };
