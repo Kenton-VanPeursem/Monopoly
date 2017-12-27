@@ -4,8 +4,7 @@
 
 long completeness[e_family::SIZE] = {2, 3, 3, 3, 3, 3, 3, 2, 4, 2};
 
-Property::Property(long location) : Base(location) {
-    numHouses = 0;
+Property::Property(long location) : Base(location), numHouses(0) {
 }
 
 void Property::BuyHouse(long num) {
@@ -19,7 +18,7 @@ e_family Property::GetFamily() {
     return family;
 }
 
-std::string Property::GetName() {
+std::string& Property::GetName() {
     return title;
 }
 

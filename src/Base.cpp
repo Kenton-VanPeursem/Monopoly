@@ -1,8 +1,7 @@
 #include "Base.hpp"
 
-Base::Base(long location) {
+Base::Base(long location) : mortgaged(false), owner(0) {
     long index = -1;
-    owner = 0;
 
     FILE* fp;
     char name[50];

@@ -15,7 +15,7 @@ class Property : public Base
 
     void BuyHouse(long num);
     e_family GetFamily();
-    std::string GetName();
+    std::string& GetName();
     long GetRent();
     void SellHouse(long num);
 };

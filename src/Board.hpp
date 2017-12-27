@@ -17,7 +17,7 @@ class Board
     void Turn(std::string name);
 
   private:
-    std::vector<std::pair<e_type, Property> > spot;
+    std::vector<std::pair<e_type, Property*> > spot;
     std::map<std::string, Player*> players;
     long fpTotal, curLocation;
     Player *curPlayer;
