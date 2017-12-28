@@ -4,7 +4,7 @@
 #include <queue>
 #include "Defines.hpp"
 
-extern const long stack_size;
+const long stack_size = 16;
 
 struct card
 {

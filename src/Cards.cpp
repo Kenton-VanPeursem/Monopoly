@@ -1,23 +1,24 @@
 #include "Cards.hpp"
+#include <list>
 #include <vector>
-
-const long stack_size = 16;
 
 Cards::Cards(e_type type)
 {
-    FILE* fp;
+    FILE *fp;
     long i;
 
-    if      (type == CHANCE)
+    if (type == CHANCE)
         fp = fopen("/Users/ksvanpeu/kProjects/Monopoly/db/Chance.txt", "r");
     else if (type == COMMUNITY_CHEST)
         fp = fopen("/Users/ksvanpeu/kProjects/Monopoly/db/Chest.txt", "r");
     else
         return;
 
+    char desc[BUFSIZ];
     for (i = 0; i < stack_size; ++i)
     {
-        fscanf(fp, "%li %li %li %s", stack[i].type, stack[i].amount1, stack[i].amount2, stack[i].description);
+        fscanf(fp, "%i %li %li %s", &stack[i].type, &stack[i].amount1, &stack[i].amount2, desc);
+        stack[i].description = std::string(desc);
     }
 
     fclose(fp);
@@ -27,7 +28,7 @@ Cards::Cards(e_type type)
 
 void Cards::Shuffle()
 {
-    std::vector<card*> tmp;
+    std::vector<card *> tmp;
     long i, loc;
 
     for (i = 0; i < stack_size; ++i)
@@ -39,7 +40,12 @@ void Cards::Shuffle()
     {
         loc = rand() % (stack_size - i);
         pile.push(tmp[loc]);
-        tmp.erase.at(loc);
+        auto it = tmp.begin();
+        for (int j = 0; j < loc; ++j)
+        {
+            it++;
+        }
+        tmp.erase(it);
     }
 }
 
@@ -49,5 +55,3 @@ void Cards::GetCard(card *it)
     pile.push(it);
     pile.pop();
 }
-
-

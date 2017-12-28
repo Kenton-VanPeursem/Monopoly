@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Board::Board() : fpTotal(0)
+Board::Board() : fpTotal(0), Chance(CHANCE), Chest(COMMUNITY_CHEST)
 {
     for (long i = 0; i < 40; ++i) {
         auto prop = std::make_pair(PROPERTY, nullptr);
