@@ -8,9 +8,9 @@ Cards::Cards(e_type type)
     long i;
 
     if (type == CHANCE)
-        fp = fopen("/Users/ksvanpeu/kProjects/Monopoly/db/Chance.txt", "r");
+        fp = fopen("db/Chance.txt", "r");
     else if (type == COMMUNITY_CHEST)
-        fp = fopen("/Users/ksvanpeu/kProjects/Monopoly/db/Chest.txt", "r");
+        fp = fopen("db/Chest.txt", "r");
     else
         return;
 
