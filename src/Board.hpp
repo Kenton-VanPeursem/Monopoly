@@ -18,6 +18,10 @@ class Board
 
     void AddPlayer(std::string name);
     void Turn(std::string name);
+    void ProcessCard(card *it);
+    void ProcessProperty();
+    void ProcessLocation();
+    void PassGo();
 
   private:
     std::vector<std::pair<e_type, Property*> > spot;

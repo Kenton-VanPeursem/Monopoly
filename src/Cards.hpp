@@ -21,8 +21,8 @@ class Cards
     Cards(e_type type);
     virtual ~Cards() {;};
 
-    void Shuffle();
-    void GetCard(card *it);
+    void  Shuffle();
+    card* GetCard();
 
     private:
     card stack[stack_size];
