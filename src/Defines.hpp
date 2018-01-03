@@ -40,4 +40,4 @@ enum e_card
     JAIL_FREE
 };
 
-long Roll();
+bool Roll(long &dice);

@@ -1,13 +1,23 @@
 #include "Defines.hpp"
 
-long Roll()
+bool Roll(long &dice)
 {
-    long ret;
+    bool doubles = false;
+    long die1, die2;
 
     do
     {
-        ret = rand() % 13;
-    } while (ret < 2);
+        die1 = rand() % 7;
+    } while (die1 == 0);
 
-    return ret;
+    do
+    {
+        die2 = rand() % 7;
+    } while (die2 == 0);
+
+    if (die1 == die2) doubles = true;
+
+    dice = die1 + die2;
+
+    return doubles;
 }

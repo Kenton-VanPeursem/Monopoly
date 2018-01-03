@@ -33,3 +33,7 @@ long Player::GetWalletAmount()
 {
     return wallet;
 }
+std::string &Player::GetName()
+{
+    return name;
+}

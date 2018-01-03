@@ -16,6 +16,7 @@ class Player
   void AdjustWallet(long amount);
   void SetInJail(bool jail);
   long GetWalletAmount();
+  std::string &GetName();
 
   std::vector<long> family;
 

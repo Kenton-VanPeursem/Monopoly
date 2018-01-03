@@ -6,7 +6,8 @@ long completeness2[e_family::SIZE] = {2, 3, 3, 3, 3, 3, 3, 2, 4, 2};
 Utility::Utility(long location) : Base(location) {}
 
 long Utility::GetRent() {
-    long price = Roll();
+    long price;
+    Roll(price);
     if(owner->FamilyCount(family) == completeness2[family]) {
         price *= 10;
     }
