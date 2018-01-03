@@ -25,5 +25,5 @@
 34  Pennsylvaia_Avenue       320     160     6       28      150     450     1000    1200    1400    200
 35  Short_Line_Railroad      200     100     8       0       0       0       0       0       0       0
 37  Park_Place               350     175     7       35      175     500     1100    1300    1500    200
-38  Board_Walk               400     200     7       50      200     600     1400    1700    2000    200
+39  Board_Walk               400     200     7       50      200     600     1400    1700    2000    200
 loc title                    price   mort    family  rent0   rent1   rent2   rent3   rent4   rent5   house
