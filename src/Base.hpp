@@ -25,5 +25,6 @@ class Base
 
     virtual long GetRent() {return 0;};
     virtual void SetMortgage(bool value);
-    virtual void SetOwner(Player &newOwner);
+    virtual void SetOwner(Player *newOwner);
+    virtual Player* GetOwner();
 };

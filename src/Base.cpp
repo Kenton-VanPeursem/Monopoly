@@ -1,4 +1,5 @@
 #include "Base.hpp"
+#include <cstdio>
 
 Base::Base(long location) : mortgaged(false), owner(0) {
     long index = -1;
@@ -6,7 +7,7 @@ Base::Base(long location) : mortgaged(false), owner(0) {
     FILE* fp;
     char name[50];
 
-    fp = fopen("/Users/ksvanpeu/kProjects/Monopoly/db/monopoly.txt", "r");
+    fp = fopen("db/monopoly.txt", "r");
 
     while(location != index) {
         fscanf(fp, "%li %s %li %li %li %li %li %li %li %li %li %li", &index,
@@ -22,8 +23,13 @@ void Base::SetMortgage(bool value) {
     mortgaged = value;
 }
 
-void Base::SetOwner(Player &newOwner) {
-    owner = &newOwner;
+void Base::SetOwner(Player *newOwner) {
+    owner = newOwner;
+}
+
+Player* Base::GetOwner()
+{
+    return owner;
 }
 
 Base::~Base() {}
