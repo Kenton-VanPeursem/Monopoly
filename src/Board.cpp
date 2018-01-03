@@ -9,6 +9,8 @@ using namespace std;
 
 Board::Board() : fpTotal(0), Chance(CHANCE), Chest(COMMUNITY_CHEST)
 {
+    srand(time(NULL)); // Seed the random number generator.
+
     for (long i = 0; i < 40; ++i) {
         auto prop = std::make_pair(PROPERTY, nullptr);
         spot.push_back(prop);
@@ -25,8 +27,6 @@ Board::Board() : fpTotal(0), Chance(CHANCE), Chest(COMMUNITY_CHEST)
     spot[30].first = GOTO_JAIL;
     spot[33].first = COMMUNITY_CHEST;
     spot[38].first = LUXURY_TAX;
-
-    cout << "done initializing board:" << endl;
 }
 
 Board::~Board()
@@ -47,102 +47,229 @@ void Board::AddPlayer(std::string name)
 
 void Board::Turn(std::string name)
 {
+    long dice;
+    bool doubles;
     auto it = players.find(name);
+
     curPlayer = it->second;
-    // curPlayer = players.find(name);
+    printf("%s ($%li):\n", name.c_str(), curPlayer->GetWalletAmount());
 
+    doubles = Roll(dice);
     curLocation = curPlayer->GetLocation();
-    curLocation += Roll();
+    curLocation += dice;
 
-    if (curLocation >= 40)
-    { // Handle passing Go and getting $200
-        curPlayer->AdjustWallet(200);
-        curLocation -= 40;
-    }
+    printf("\tYour dice roll is %li", dice);
+    if(doubles)
+        printf(" (doubles)!\n");
+    else
+        printf(".\n");
 
-    curPlayer->SetLocation(curLocation);
+    PassGo(); // Should be called anytime a location changes!
 
+    ProcessLocation();
+
+    printf("%s turn over ($%li)\n", name.c_str(), curPlayer->GetWalletAmount());
+}
+
+void Board::ProcessLocation()
+{
     switch (spot[curLocation].first)
     {
-    case GO:
-    {
-        break;
-    }
-    case JAIL:
-    {
-        break;
-    }
-    case FREE_PARKING:
-    {
-        curPlayer->AdjustWallet(fpTotal);
-        fpTotal = 0;
-        break;
-    }
-    case GOTO_JAIL:
-    {
-        curPlayer->SetLocation(10);
-        curPlayer->SetInJail(true);
-        break;
-    }
-    case CHANCE:
-    {
-        // Action;
-        break;
-    }
-    case COMMUNITY_CHEST:
-    {
-        // Action;
-        break;
-    }
-    case INCOME_TAX:
-    {
-        if (curPlayer->GetWalletAmount() < 200)
+        case GO:
         {
-            // Handle
+            break;
         }
-        else
+        case JAIL:
         {
+            break;
+        }
+        case FREE_PARKING:
+        {
+            printf("\tYou have landed on 'Free Parking'!\n");
+            curPlayer->AdjustWallet(fpTotal);
+            fpTotal = 0;
+            break;
+        }
+        case GOTO_JAIL:
+        {
+            curPlayer->SetLocation(10);
+            curPlayer->SetInJail(true);
+            break;
+        }
+        case CHANCE:
+        {
+            printf("\tChance: ");
+            ProcessCard(Chance.GetCard());
+            break;
+        }
+        case COMMUNITY_CHEST:
+        {
+            printf("\tCommunity Chest: ");
+            ProcessCard(Chest.GetCard());
+            break;
+        }
+        case INCOME_TAX:
+        {
+            printf("\tYou have landed on 'Income Tax'!\n");
             curPlayer->AdjustWallet(-200);
+            fpTotal += 200;
+            break;
         }
-        fpTotal += 200;
-        break;
-    }
-    case LUXURY_TAX:
-    {
-        if (curPlayer->GetWalletAmount() < 75)
+        case LUXURY_TAX:
         {
-            // Handle
+            printf("\tYou have landed on 'Luxury Tax'!\n");
+            curPlayer->AdjustWallet(-75);
+            fpTotal += 75;
+            break;
+        }
+        case PROPERTY:
+        {
+            ProcessProperty();
+            break;
+        }
+    }
+}
+
+void Board::ProcessProperty()
+{
+    if (spot[curLocation].second == nullptr)
+    {
+        Property *prop = new Property(curLocation);
+        long price = prop->GetPrice();
+        printf("\tDo you want to buy %s for %li?\n", prop->GetName().c_str(), price);
+        char response = 'y';
+        //std::cin >> response;
+        if ((response == 'Y') || (response == 'y'))
+        {
+            curPlayer->AdjustWallet(-price);
+            curPlayer->family[prop->GetFamily()]++;
+            prop->SetOwner(curPlayer);
+            spot[curLocation].second = prop;
         }
         else
         {
-            curPlayer->AdjustWallet(-75);
+            delete prop;
         }
-        fpTotal += 75;
-        break;
     }
-    case PROPERTY:
+    else if (spot[curLocation].second->GetOwner() != curPlayer)
+    { // Collect rent
+        printf("\tYou owe rent to %s!!!\n", spot[curLocation].second->GetOwner()->GetName().c_str());
+    }
+}
+
+void Board::ProcessCard(card *it)
+{
+printf("%s\n", it->description.c_str());
+switch(it->type)
     {
-        if (spot[curLocation].second == nullptr)
+        case MOVE:
         {
-            Property *prop = new Property(curLocation);
-            long price = prop->GetPrice();
-            // std::string &name = prop->GetName();
-            printf("\nDo you want to buy %s for %li?\n", prop->GetName().c_str(), price);
-            char response;
-            std::cin >> response;
-            if ((response == 'Y') || (response == 'y'))
+            long move = it->amount1;
+            if (move >= 0)
             {
-                curPlayer->AdjustWallet(-price);
-                curPlayer->family[prop->GetFamily()]++;
-                prop->SetOwner(*curPlayer);
-                spot[curLocation].second = prop;
+                if(move > curLocation)
+                    curLocation = move;
+                else
+                    curLocation = 40 + move;
             }
             else
             {
-                delete prop;
+                if (move == -3) // Go back 3 spaces
+                    curLocation += move;
+                else if (move == -10)
+                { // Nearest railroad
+                    if (curLocation < 5)
+                        curLocation = 5;
+                    else if (curLocation < 15)
+                        curLocation = 15;
+                    else if (curLocation < 25)
+                        curLocation = 25;
+                    else if (curLocation < 35)
+                        curLocation = 35;
+                    else
+                        curLocation = 40 + 5;
+                }
+                else if (move == -20)
+                { // Nearest utility
+                    if (curLocation < 12)
+                        curLocation = 12;
+                    else if (curLocation < 28)
+                        curLocation = 28;
+                    else
+                        curLocation = 40 + 12;
+                }
             }
+
+            PassGo();
+
+            ProcessLocation();
+
+            break;
         }
-        break;
+        case COLLECT:
+        {
+            long collect = it->amount1;
+            if (collect < 0)
+            { // Collect from each player
+                long i, size = players.size();
+                auto iter = players.begin();
+
+                for (i = 0; i < size; ++i, ++iter)
+                {
+                    if (iter->second == curPlayer)
+                        continue;
+                    iter->second->AdjustWallet(collect);
+                    curPlayer->AdjustWallet(-collect);
+                }
+            }
+            else
+                curPlayer->AdjustWallet(collect);
+
+            break;
+        }
+        case PAY:
+        {
+            long pay = it->amount1;
+            if (it->amount2 > 0)
+            { // process houses and hotels
+            }
+            else if (pay < 0)
+            { // Pay each player
+                long i, size = players.size();
+                auto iter = players.begin();
+
+                for (i = 0; i < size; ++i, ++iter)
+                {
+                    if (iter->second == curPlayer)
+                        continue;
+                    iter->second->AdjustWallet(-pay);
+                    curPlayer->AdjustWallet(pay);
+                }
+            }
+            else
+            {
+                curPlayer->AdjustWallet(-pay);
+                fpTotal += pay;
+            }
+            break;
+        }
+        case JAIL_FREE:
+        {
+            break;
+        }
     }
+}
+
+void Board::PassGo()
+{ // This function should be called every time a location changes.
+  // Two actions take place:
+  //   1) The location is updated (even if not passing Go)
+  //   2) The player's wallet is adjusted if Go is passed
+    if (curLocation >= 40)
+    {
+        curPlayer->AdjustWallet(200);
+        curLocation -= 40;
+        printf("\tYou have passed 'Go', collecting $200.\n");
     }
+    curPlayer->SetLocation(curLocation);
 }

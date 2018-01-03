@@ -7,10 +7,12 @@ Cards::Cards(e_type type)
     FILE *fp;
     long i;
 
+    srand(time(NULL)); // Seed the random number generator.
+
     if (type == CHANCE)
-        fp = fopen("/Users/ksvanpeu/kProjects/Monopoly/db/Chance.txt", "r");
+        fp = fopen("db/Chance.txt", "r");
     else if (type == COMMUNITY_CHEST)
-        fp = fopen("/Users/ksvanpeu/kProjects/Monopoly/db/Chest.txt", "r");
+        fp = fopen("db/Chest.txt", "r");
     else
         return;
 
@@ -49,9 +51,11 @@ void Cards::Shuffle()
     }
 }
 
-void Cards::GetCard(card *it)
+card* Cards::GetCard()
 {
-    it = pile.front();
+    card* it = pile.front();
     pile.push(it);
     pile.pop();
+
+    return it;
 }
