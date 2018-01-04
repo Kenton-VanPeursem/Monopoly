@@ -8,8 +8,7 @@
 #include "Player.hpp"
 #include "Property.hpp"
 
-class Board
-{
+class Board {
   public:
     Board();
     virtual ~Board();

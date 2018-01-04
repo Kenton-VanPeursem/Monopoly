@@ -1,17 +1,15 @@
 #include "Defines.hpp"
+#include <stdlib.h>
 
-bool Roll(long &dice)
-{
+bool Roll(long &dice) {
     bool doubles = false;
     long die1, die2;
 
-    do
-    {
+    do {
         die1 = rand() % 7;
     } while (die1 == 0);
 
-    do
-    {
+    do {
         die2 = rand() % 7;
     } while (die2 == 0);
 

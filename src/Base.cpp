@@ -1,5 +1,5 @@
 #include "Base.hpp"
-#include <cstdio>
+#include <stdio.h>
 
 Base::Base(long location) : mortgaged(false), owner(0) {
     long index = -1;
@@ -27,8 +27,7 @@ void Base::SetOwner(Player *newOwner) {
     owner = newOwner;
 }
 
-Player* Base::GetOwner()
-{
+Player* Base::GetOwner() {
     return owner;
 }
 

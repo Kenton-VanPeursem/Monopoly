@@ -4,8 +4,7 @@
 #include "Player.hpp"
 #include <string>
 
-class Base
-{
+class Base {
   protected:
     enum e_family family;
     long housePrice, mortgagePrice, price;

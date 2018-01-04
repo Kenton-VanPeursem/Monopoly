@@ -6,8 +6,7 @@
 
 const long stack_size = 16;
 
-struct card
-{
+struct card {
     e_card type;
     long amount1;
     long amount2;
@@ -15,8 +14,7 @@ struct card
     long flag;
 };
 
-class Cards
-{
+class Cards {
     public:
     Cards(e_type type);
     virtual ~Cards() {;};

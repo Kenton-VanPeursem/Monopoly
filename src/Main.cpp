@@ -3,15 +3,13 @@
 
 using namespace std;
 
-int main()
-{
+int main() {
     Board Mono;
 
     Mono.AddPlayer("Kent");
     Mono.AddPlayer("David");
 
-    while (1)
-    {
+    while (1) {
         Mono.Turn("Kent");
         Mono.Turn("David");
     }

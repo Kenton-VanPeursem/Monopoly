@@ -4,8 +4,7 @@
 #include <string>
 #include <vector>
 
-class Property : public Base
-{
+class Property : public Base {
   private:
     long numHouses;
 

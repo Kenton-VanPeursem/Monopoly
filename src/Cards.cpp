@@ -1,9 +1,10 @@
 #include "Cards.hpp"
 #include <list>
+#include <stdio.h>
+#include <time.h>
 #include <vector>
 
-Cards::Cards(e_type type)
-{
+Cards::Cards(e_type type) {
     FILE *fp;
     long i;
 
@@ -17,8 +18,7 @@ Cards::Cards(e_type type)
         return;
 
     char desc[BUFSIZ];
-    for (i = 0; i < stack_size; ++i)
-    {
+    for (i = 0; i < stack_size; ++i) {
         fscanf(fp, "%i %li %li %s", &stack[i].type, &stack[i].amount1, &stack[i].amount2, desc);
         stack[i].description = std::string(desc);
     }
@@ -28,31 +28,25 @@ Cards::Cards(e_type type)
     Shuffle();
 }
 
-void Cards::Shuffle()
-{
+void Cards::Shuffle() {
     std::vector<card *> tmp;
     long i, loc;
 
     for (i = 0; i < stack_size; ++i)
-    {
         tmp.push_back(&stack[i]);
-    }
 
-    for (i = 0; i < stack_size; ++i)
-    {
+    for (i = 0; i < stack_size; ++i) {
         loc = rand() % (stack_size - i);
         pile.push(tmp[loc]);
         auto it = tmp.begin();
-        for (int j = 0; j < loc; ++j)
-        {
+        for (int j = 0; j < loc; ++j) {
             it++;
         }
         tmp.erase(it);
     }
 }
 
-card* Cards::GetCard()
-{
+card* Cards::GetCard() {
     card* it = pile.front();
     pile.push(it);
     pile.pop();

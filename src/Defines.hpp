@@ -2,8 +2,7 @@
 
 #include <stdlib.h>
 
-enum e_family
-{
+enum e_family {
     DARK_PURPLE,
     LIGHT_BLUE,
     LIGHT_PURPLE,
@@ -19,8 +18,7 @@ enum e_family
 
 // extern long completeness[e_family::SIZE] = {2, 3, 3, 3, 3, 3, 3, 2, 4, 2};
 
-enum e_type
-{
+enum e_type {
     GO,
     JAIL,
     FREE_PARKING,
@@ -32,8 +30,7 @@ enum e_type
     PROPERTY
 };
 
-enum e_card
-{
+enum e_card {
     MOVE,
     COLLECT,
     PAY,
