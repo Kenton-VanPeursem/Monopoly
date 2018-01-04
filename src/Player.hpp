@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>
-#include <vector>
 #include "Defines.hpp"
 #include "Property.hpp"
+#include <string>
+#include <vector>
 
 class Player
   {

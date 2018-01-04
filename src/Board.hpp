@@ -1,12 +1,12 @@
 #pragma once
 
+#include "Cards.hpp"
+#include "Player.hpp"
+#include "Property.hpp"
 #include <string>
 #include <vector>
 #include <map>
 #include <utility>
-#include "Cards.hpp"
-#include "Player.hpp"
-#include "Property.hpp"
 
 class Board {
   public:

@@ -1,4 +1,5 @@
 #include "Board.hpp"
+#include "Player.hpp"
 #include "Property.hpp"
 #include <iostream>
 #include <string>

@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Defines.hpp"
 #include <string>
 #include <queue>
-#include "Defines.hpp"
 
 const long stack_size = 16;
 
