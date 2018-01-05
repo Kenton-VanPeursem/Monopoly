@@ -11,7 +11,9 @@ int main() {
 
     while (1) {
         Mono.Turn("Kent");
+        std::cout << std::endl;
         Mono.Turn("David");
+        std::cout << std::endl;
     }
 
     return 0;

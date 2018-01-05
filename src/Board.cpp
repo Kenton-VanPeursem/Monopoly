@@ -1,6 +1,8 @@
 #include "Board.hpp"
 #include "Player.hpp"
 #include "Property.hpp"
+#include "Utility.hpp"
+#include "Railroad.hpp"
 #include <iostream>
 #include <string>
 #include <stdio.h>
@@ -28,6 +30,7 @@ Board::Board() : fpTotal(0), Chance(CHANCE), Chest(COMMUNITY_CHEST) {
     spot[22].first = CHANCE;
     spot[30].first = GOTO_JAIL;
     spot[33].first = COMMUNITY_CHEST;
+    spot[36].first = CHANCE;
     spot[38].first = LUXURY_TAX;
 }
 
@@ -127,17 +130,35 @@ void Board::ProcessLocation() {
 
 void Board::ProcessProperty() {
     if (spot[curLocation].second == nullptr) {
-        Base *prop = new Base(curLocation);
-        long price = prop->GetPrice();
-        printf("\tDo you want to buy %s for %li?\n", prop->GetName().c_str(), price);
-        char response = 'y';
-        //std::cin >> response;
+        Base* prop;
+        switch(curLocation) {
+            case 5:
+            case 15:
+            case 25:
+            case 35:
+                prop = new Railroad(curLocation);
+                break;
+            case 12:
+            case 28:
+                prop = new Utility(curLocation);
+                break;
+            default:
+                prop = new Property(curLocation);
+                break;
+        }
+
+        printf("\tDo you want to buy %s for %li?\n",
+            prop->GetName().c_str(), prop->GetPrice());
+
+        char response;
+        std::cin >> response;
 
         if ((response == 'Y') || (response == 'y')) {
-            curPlayer->AdjustWallet(-price);
+            curPlayer->AdjustWallet(-prop->GetPrice());
             curPlayer->family[prop->GetFamily()]++;
             prop->SetOwner(curPlayer);
             spot[curLocation].second = prop;
+            curPlayer->AddProperty(prop);
         }
 
         else
@@ -146,7 +167,11 @@ void Board::ProcessProperty() {
 
     else if (spot[curLocation].second->GetOwner() != curPlayer) {
         // Collect rent
-        printf("\tYou owe rent to %s!!!\n", spot[curLocation].second->GetOwner()->GetName().c_str());
+        long rent = spot[curLocation].second->GetRent();
+        printf("\tYou owe %d to %s!!!\n", rent, spot[curLocation].second->GetOwner()->GetName().c_str());
+
+        spot[curLocation].second->GetOwner()->AdjustWallet(rent);
+        curPlayer->AdjustWallet(-rent);
     }
 }
 
