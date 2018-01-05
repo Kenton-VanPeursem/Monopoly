@@ -20,12 +20,16 @@ class Player {
     void SetJailFreeCard(bool jail);
     long GetWalletAmount();
     std::string &GetName();
+    void TurnsInJailInc();
+    void TurnsInJailReset();
+    long TurnsInJail();
+    bool InJail();
 
     std::vector<long> family;
 
   private:
     std::string name;
-    long wallet, location;
+    long wallet, location, jailCount;
     bool inJail, hasJailFree;
     std::vector<Base*> properties;
   };

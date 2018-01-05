@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-Player::Player(std::string name) : name(name), wallet(1500), inJail(false), location(0), hasJailFree(false) {
+Player::Player(std::string name) : name(name), wallet(1500), inJail(false), location(0), hasJailFree(false), jailCount(0) {
     for (long i = 0; i < e_family::SIZE; ++i)
         family.push_back(0);
 }
@@ -41,4 +41,20 @@ long Player::GetWalletAmount() {
 }
 std::string &Player::GetName() {
     return name;
+}
+
+void Player::TurnsInJailInc() {
+    ++jailCount;
+}
+
+void Player::TurnsInJailReset() {
+    jailCount = 0;
+}
+
+long Player::TurnsInJail() {
+    return jailCount;
+}
+
+bool Player::InJail() {
+    return inJail;
 }

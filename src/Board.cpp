@@ -45,24 +45,63 @@ void Board::AddPlayer(std::string name) {
 void Board::Turn(std::string name) {
     long dice;
     bool doubles;
+    long doubleCount = 0;
     auto it = players.find(name);
 
     curPlayer = it->second;
-    printf("%s ($%li):\n", name.c_str(), curPlayer->GetWalletAmount());
 
-    doubles = Roll(dice);
-    curLocation = curPlayer->GetLocation();
-    curLocation += dice;
 
-    printf("\tYour dice roll is %li", dice);
-    if(doubles)
-        printf(" (doubles)!\n");
-    else
-        printf(".\n");
+    do {
+        printf("%s ($%li): ", name.c_str(), curPlayer->GetWalletAmount());
 
-    PassGo(); // Should be called anytime a location changes!
+        if(curPlayer->InJail()) {
+            curPlayer->TurnsInJailInc();
+            printf("\tYou are in Jail. Would you like to pay the $50 to be released? (y/n)\t");
+            char response;
+            std::cin >> response;
+            if(response != 'y') {
+                switch (curPlayer->TurnsInJail()) {
+                    case 1:
+                        printf("\n\tThis is your first roll.\n");
+                    case 2:
+                        printf("\n\tThis is your second roll.\n");
+                    case 3:
+                        printf("\n\tThis is your third roll. If you do not roll a doubles then you must pay the $50!\n");
+                }
+                if(curPlayer->TurnsInJail() == 3) {
+                    curPlayer->AdjustWallet(-50);
+                }
+                else
+                    break;
+            }
+            else
+                curPlayer->AdjustWallet(-50);
+        }
+        curPlayer->TurnsInJailReset();
+        doubles = Roll(dice);
+        curLocation = curPlayer->GetLocation();
+        curLocation += dice;
 
-    ProcessLocation();
+        printf("Your dice roll is %li", dice);
+        if(doubles) {
+            printf(" (doubles)!\n");
+            doubleCount++;
+            if(doubleCount == 3) {
+                printf("\tThis is your third doubles. Go straight to Jail.");
+                curLocation = 10;
+                curPlayer->SetLocation(curLocation);
+                curPlayer->SetInJail(true);
+                break;
+            }
+        }
+        else
+            printf(".\n");
+
+        PassGo(); // Should be called anytime a location changes!
+
+        ProcessLocation();
+
+    } while(doubles);
 
     printf("%s turn over ($%li)\n", name.c_str(), curPlayer->GetWalletAmount());
 }
@@ -75,11 +114,16 @@ void Board::ProcessLocation() {
         }
         case JAIL:
         {
+            printf("\tYou are visiting the Jail!\n");
             break;
         }
         case FREE_PARKING:
         {
-            printf("\tYou have landed on 'Free Parking'!\n");
+            printf("\tYou have landed on 'Free Parking'!");
+            if(fpTotal > 0)
+                printf(" You received $%li total!\n", fpTotal);
+            else
+                printf("\n");
             curPlayer->AdjustWallet(fpTotal);
             fpTotal = 0;
             break;
@@ -104,14 +148,14 @@ void Board::ProcessLocation() {
         }
         case INCOME_TAX:
         {
-            printf("\tYou have landed on 'Income Tax'!\n");
+            printf("\tYou have landed on 'Income Tax' ($200)!\n");
             curPlayer->AdjustWallet(-200);
             fpTotal += 200;
             break;
         }
         case LUXURY_TAX:
         {
-            printf("\tYou have landed on 'Luxury Tax'!\n");
+            printf("\tYou have landed on 'Luxury Tax' ($75)!\n");
             curPlayer->AdjustWallet(-75);
             fpTotal += 75;
             break;
@@ -146,9 +190,10 @@ void Board::ProcessProperty() {
                 prop = new Property(curLocation);
                 break;
         }
+        printf("\tYou have landed on %s.\n", prop->GetName().c_str());
 
-        printf("\tDo you want to buy %s for %li?\n",
-            prop->GetName().c_str(), prop->GetPrice());
+        printf("\tDo you want to purchase it for $%li? (y/n)\t",
+            prop->GetPrice());
 
         char response;
         std::cin >> response;
@@ -168,11 +213,16 @@ void Board::ProcessProperty() {
     else if (spot[curLocation].second->GetOwner() != curPlayer) {
         // Collect rent
         long rent = spot[curLocation].second->GetRent();
-        printf("\tYou owe %d to %s!!!\n", rent, spot[curLocation].second->GetOwner()->GetName().c_str());
+        printf("\tUh-oh, %s owns %s, you owe $%d!!\n",
+        spot[curLocation].second->GetOwner()->GetName().c_str(),
+        spot[curLocation].second->GetName().c_str(), rent);
 
         spot[curLocation].second->GetOwner()->AdjustWallet(rent);
         curPlayer->AdjustWallet(-rent);
     }
+
+    else
+        printf("\tYou have landed on %s.\n\tYou own it, enjoy your stay!!\n", spot[curLocation].second->GetName().c_str());
 }
 
 void Board::ProcessCard(card *it) {
