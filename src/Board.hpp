@@ -23,7 +23,7 @@ class Board {
     void PassGo();
 
   private:
-    std::vector<std::pair<e_type, Property*> > spot;
+    std::vector<std::pair<e_type, Base*> > spot;
     std::map<std::string, Player*> players;
     long fpTotal, curLocation;
     Player *curPlayer;

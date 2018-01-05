@@ -127,7 +127,7 @@ void Board::ProcessLocation() {
 
 void Board::ProcessProperty() {
     if (spot[curLocation].second == nullptr) {
-        Property *prop = new Property(curLocation);
+        Base *prop = new Base(curLocation);
         long price = prop->GetPrice();
         printf("\tDo you want to buy %s for %li?\n", prop->GetName().c_str(), price);
         char response = 'y';

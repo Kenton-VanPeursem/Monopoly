@@ -10,7 +10,7 @@ class Player {
     Player(std::string name);
     virtual ~Player() {;};
 
-    void AddProperty(Property *prop);
+    void AddProperty(Base *prop);
     long FamilyCount(enum e_family fam);
     void SetLocation(long loc);
     long GetLocation();
@@ -27,5 +27,5 @@ class Player {
     std::string name;
     long wallet, location;
     bool inJail, hasJailFree;
-    std::vector<Property*> properties;
+    std::vector<Base*> properties;
   };

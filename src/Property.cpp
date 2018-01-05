@@ -15,14 +15,6 @@ void Property::BuyHouse(long num) {
         numHouses += num;
 }
 
-e_family Property::GetFamily() {
-    return family;
-}
-
-std::string& Property::GetName() {
-    return title;
-}
-
 long Property::GetRent() {
     if(numHouses > 0)
         return rent[numHouses - 1];

@@ -20,7 +20,8 @@ class Base {
 
     virtual long GetMortgagePrice() {return mortgagePrice;};
     virtual long GetPrice() {return price;};
-    virtual std::string GetTitle() {return title;};
+    virtual std::string& GetName() {return title;};
+    virtual e_family GetFamily() {return family;};
     virtual bool IsMortgaged() {return mortgaged;};
     virtual long GetRent() {return 0;};
 

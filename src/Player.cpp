@@ -5,7 +5,7 @@ Player::Player(std::string name) : name(name), wallet(1500), inJail(false), loca
         family.push_back(0);
 }
 
-void Player::AddProperty(Property *prop) {
+void Player::AddProperty(Base *prop) {
     properties.push_back(prop);
 }
 

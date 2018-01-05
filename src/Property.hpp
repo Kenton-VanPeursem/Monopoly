@@ -13,8 +13,6 @@ class Property : public Base {
     ~Property();
 
     void BuyHouse(long num);
-    e_family GetFamily();
-    std::string& GetName();
     long GetRent();
     void SellHouse(long num);
 };
