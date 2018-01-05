@@ -10,7 +10,8 @@
 using namespace std;
 
 Board::Board() : fpTotal(0), Chance(CHANCE), Chest(COMMUNITY_CHEST) {
-    srand(time(NULL)); // Seed the random number generator.
+    // Seed the random number generator.
+    srand(time(NULL));
 
     for (long i = 0; i < 40; ++i) {
         auto prop = std::make_pair(PROPERTY, nullptr);
@@ -31,13 +32,7 @@ Board::Board() : fpTotal(0), Chance(CHANCE), Chest(COMMUNITY_CHEST) {
 }
 
 Board::~Board() {
-    // long i;
 
-    // for (i = 0; i < players.size(); ++i)
-    //     delete players.at(i);
-
-    // for (i = 0; i < 40; ++i)
-    //     delete spot[i].second;
 }
 
 void Board::AddPlayer(std::string name) {
@@ -123,6 +118,10 @@ void Board::ProcessLocation() {
             ProcessProperty();
             break;
         }
+        default:
+        {
+            break;
+        }
     }
 }
 
@@ -141,9 +140,8 @@ void Board::ProcessProperty() {
             spot[curLocation].second = prop;
         }
 
-        else {
+        else
             delete prop;
-        }
     }
 
     else if (spot[curLocation].second->GetOwner() != curPlayer) {
@@ -217,9 +215,13 @@ void Board::ProcessCard(card *it) {
         case PAY:
         {
             long pay = it->amount1;
-            if (it->amount2 > 0) { // process houses and hotels
+
+            // process houses and hotels
+            if (it->amount2 > 0) {
             }
-            else if (pay < 0) { // Pay each player
+
+            // Pay each player
+            else if (pay < 0) {
                 long i, size = players.size();
                 auto iter = players.begin();
 

@@ -1,4 +1,5 @@
 #include "Base.hpp"
+#include "Player.hpp"
 #include <stdio.h>
 
 Base::Base(long location) : mortgaged(false), owner(0) {
@@ -31,4 +32,6 @@ Player* Base::GetOwner() {
     return owner;
 }
 
-Base::~Base() {}
+Base::~Base() {
+
+}

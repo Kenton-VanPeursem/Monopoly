@@ -3,9 +3,9 @@
 Player::Player(std::string name) : name(name), wallet(1500), inJail(false), location(0), hasJailFree(false) {
     for (long i = 0; i < e_family::SIZE; ++i)
         family.push_back(0);
-};
+}
 
-void Player::AddProperty(Property prop) {
+void Player::AddProperty(Property *prop) {
     properties.push_back(prop);
 }
 

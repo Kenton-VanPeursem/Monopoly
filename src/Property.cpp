@@ -1,3 +1,4 @@
+#include "Player.hpp"
 #include "Property.hpp"
 #include "Defines.hpp"
 #include <string>

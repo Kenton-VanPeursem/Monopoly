@@ -1,3 +1,4 @@
+#include "Player.hpp"
 #include "Railroad.hpp"
 #include <string>
 #include <math.h>

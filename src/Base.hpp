@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Defines.hpp"
-#include "Player.hpp"
 #include <string>
+
+class Player;
 
 class Base {
   protected:
@@ -21,8 +22,8 @@ class Base {
     virtual long GetPrice() {return price;};
     virtual std::string GetTitle() {return title;};
     virtual bool IsMortgaged() {return mortgaged;};
-
     virtual long GetRent() {return 0;};
+
     virtual void SetMortgage(bool value);
     virtual void SetOwner(Player *newOwner);
     virtual Player* GetOwner();
