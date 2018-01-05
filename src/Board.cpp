@@ -56,29 +56,57 @@ void Board::Turn(std::string name) {
 
         if(curPlayer->InJail()) {
             curPlayer->TurnsInJailInc();
+            std::cout << std::endl;
             printf("\tYou are in Jail. Would you like to pay the $50 to be released? (y/n)\t");
             char response;
             std::cin >> response;
             if(response != 'y') {
                 switch (curPlayer->TurnsInJail()) {
-                    case 1:
-                        printf("\n\tThis is your first roll.\n");
-                    case 2:
-                        printf("\n\tThis is your second roll.\n");
-                    case 3:
-                        printf("\n\tThis is your third roll. If you do not roll a doubles then you must pay the $50!\n");
+                    case 1: {
+                        printf("\tThis is your first roll.\n");
+                        break;
+                    }
+                    case 2: {
+                        printf("\tThis is your second roll.\n");
+                        break;
+                    }
+                    case 3: {
+                        printf("\tThis is your third roll. If you do not roll a doubles then you must pay the $50!\n");
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                if(curPlayer->TurnsInJail() == 3) {
-                    curPlayer->AdjustWallet(-50);
+                doubles = Roll(dice);
+                if(doubles) {
+                    printf("\tCongratulations!! ", dice);
+                    curPlayer->TurnsInJailReset();
+                    curPlayer->SetInJail(false);
                 }
-                else
-                    break;
+                else {
+                    printf("\tSorry, you did not roll a doubles! ");
+                    if(curPlayer->TurnsInJail() == 3) {
+                        curPlayer->AdjustWallet(-50);
+                        curPlayer->TurnsInJailReset();
+                        curPlayer->SetInJail(false);
+                        doubles = Roll(dice);
+                    }
+                    else {
+                        std::cout << std::endl;
+                        break;
+                    }
+                }
             }
-            else
+            else {
                 curPlayer->AdjustWallet(-50);
+                curPlayer->TurnsInJailReset();
+                curPlayer->SetInJail(false);
+                doubles = Roll(dice);
+            }
         }
-        curPlayer->TurnsInJailReset();
-        doubles = Roll(dice);
+        else
+            doubles = Roll(dice);
+
         curLocation = curPlayer->GetLocation();
         curLocation += dice;
 
@@ -87,7 +115,7 @@ void Board::Turn(std::string name) {
             printf(" (doubles)!\n");
             doubleCount++;
             if(doubleCount == 3) {
-                printf("\tThis is your third doubles. Go straight to Jail.");
+                printf("\tThis is your third doubles. Go straight to Jail.\n");
                 curLocation = 10;
                 curPlayer->SetLocation(curLocation);
                 curPlayer->SetInJail(true);
@@ -101,7 +129,7 @@ void Board::Turn(std::string name) {
 
         ProcessLocation();
 
-    } while(doubles);
+    } while(doubles && !curPlayer->InJail());
 
     printf("%s turn over ($%li)\n", name.c_str(), curPlayer->GetWalletAmount());
 }
@@ -130,6 +158,7 @@ void Board::ProcessLocation() {
         }
         case GOTO_JAIL:
         {
+            printf("\tYou landed on 'Go To Jail'!\n");
             curPlayer->SetLocation(10);
             curPlayer->SetInJail(true);
             break;
@@ -222,7 +251,7 @@ void Board::ProcessProperty() {
     }
 
     else
-        printf("\tYou have landed on %s.\n\tYou own it, enjoy your stay!!\n", spot[curLocation].second->GetName().c_str());
+        printf("\tYou have landed on %s.\n\tYou own it!!\n", spot[curLocation].second->GetName().c_str());
 }
 
 void Board::ProcessCard(card *it) {
@@ -232,6 +261,12 @@ void Board::ProcessCard(card *it) {
         {
             long move = it->amount1;
             if (move >= 0) {
+                if(move == 10) { // Go to Jail
+                    printf("\tYou are now in Jail!!\n");
+                    curPlayer->SetLocation(10);
+                    curPlayer->SetInJail(true);
+                    break;
+                }
                 if (move > curLocation)
                     curLocation = move;
                 else
