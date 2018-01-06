@@ -1,4 +1,6 @@
 #include "Player.hpp"
+#include <iostream>
+#include <stdio.h>
 
 Player::Player(std::string name) : name(name), wallet(1500), inJail(false), location(0), hasJailFree(false), jailCount(0) {
     for (long i = 0; i < e_family::SIZE; ++i)
@@ -57,4 +59,26 @@ long Player::TurnsInJail() {
 
 bool Player::InJail() {
     return inJail;
+}
+
+void Player::PrintProperties() {
+    if(!properties.empty()) {
+        printf("\n\tYour properties:\n");
+        auto it = properties.begin();
+
+        long colCount = 1;
+        std::cout << "\t";
+        while(it != properties.end()) {
+            std::cout<< (*it)->GetName().c_str() << "\t\t";
+            if(colCount % 4 == 0)
+                std::cout << std::endl << "\t";
+            it++;
+            colCount++;
+        }
+        printf("\n");
+    }
+    else
+        printf("\n\tYou do not own any property.\n");
+
+    printf("\n");
 }

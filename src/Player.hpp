@@ -24,6 +24,7 @@ class Player {
     void TurnsInJailReset();
     long TurnsInJail();
     bool InJail();
+    void PrintProperties();
 
     std::vector<long> family;
 

@@ -47,18 +47,21 @@ void Board::Turn(std::string name) {
     bool doubles;
     long doubleCount = 0;
     auto it = players.find(name);
+    char response;
 
     curPlayer = it->second;
 
 
     do {
-        printf("%s ($%li): ", name.c_str(), curPlayer->GetWalletAmount());
-
+        printf("%s ($%li):\n", name.c_str(), curPlayer->GetWalletAmount());
+        printf("\tDo you want to print out your properties? (y/n)\t");
+        std::cin >> response;
+        if(response == 'y')
+            curPlayer->PrintProperties();
         if(curPlayer->InJail()) {
             curPlayer->TurnsInJailInc();
             std::cout << std::endl;
             printf("\tYou are in Jail. Would you like to pay the $50 to be released? (y/n)\t");
-            char response;
             std::cin >> response;
             if(response != 'y') {
                 switch (curPlayer->TurnsInJail()) {
@@ -110,7 +113,7 @@ void Board::Turn(std::string name) {
         curLocation = curPlayer->GetLocation();
         curLocation += dice;
 
-        printf("Your dice roll is %li", dice);
+        printf("\tYour dice roll is %li", dice);
         if(doubles) {
             printf(" (doubles)!\n");
             doubleCount++;
