@@ -9,6 +9,7 @@ Utility::Utility(long location) : Base(location) {}
 long Utility::GetRent() {
     long price;
     Roll(price);
+    printf("\tYou have rolled a %li\n", price);
     if(owner->FamilyCount(family) == completeness2[family]) {
         price *= 10;
     }
