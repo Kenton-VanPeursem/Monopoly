@@ -22,7 +22,7 @@
 29  Marvin_Gardens           280     140     5       24      120     360     850     1025    1200    150
 31  Pacific_Avenue           300     150     6       26      130     390     900     1100    1275    200
 32  North_Carolina_Avenue    300     150     6       26      130     390     900     1100    1275    200
-34  Pennsylvaia_Avenue       320     160     6       28      150     450     1000    1200    1400    200
+34  Pennsylvania_Avenue      320     160     6       28      150     450     1000    1200    1400    200
 35  Short_Line_Railroad      200     100     8       0       0       0       0       0       0       0
 37  Park_Place               350     175     7       35      175     500     1100    1300    1500    200
 39  Board_Walk               400     200     7       50      200     600     1400    1700    2000    200
